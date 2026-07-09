@@ -1,5 +1,7 @@
 import { TaskCard } from '../ui/TaskCard';
 import { useTaskStore } from '../../store/taskStore';
+import { useState } from 'react';
+import TaskForm from '../ui/TaskForm';
 const AppLayout = () => {
   return (
     <div className="w-[99vw] h-[100vh] flex flex-row justify-start p-2 ">
@@ -125,9 +127,10 @@ const Button = () => {
 
 const TaskDraft = () => {
   const { tasks } = useTaskStore();
+  const [showModal , isModalOpen] = useState(false)
   return (
-    <div className="flex flex-col gap-2 mt-3">
-      <Column title="Draft Tasks">
+    <div className="flex flex-row gap-2  items-center-safe">
+      <Column title="Draft Tasks ">
         {tasks
           .filter((task) => task.status == 'draft')
           .map((task) => (
@@ -143,36 +146,20 @@ const TaskDraft = () => {
             />
           ))}
       </Column>
+      <img
+        src=".\src\assets\icons\icons8-plus-30.png"
+        alt="plus sign"
+        width={50}
+        height={50}
+        className="w-8 h-8"
+        onClick={() => isModalOpen(true)}
+        
+      />
+      {showModal && <TaskForm onClose={() => isModalOpen(false)}/>}
     </div>
   );
 };
 
-// const TaskForm = () => {
-//   return (
-//     <div className="p-3 flex flex-col gap-3 border rounded-lg bg-white">
-
-//       {/* Title Input */}
-//       <input
-//         className="border p-2 rounded-md"
-//         placeholder="Task title..."
-//       />
-
-//       {/* Priority selector */}
-//       <div className="flex gap-2">
-//         <div className="w-3 h-3 rounded-full border" />
-//         <div className="w-3 h-3 rounded-full border" />
-//         <div className="w-3 h-3 rounded-full border" />
-//       </div>
-
-//       {/* Add button */}
-//       <button className="bg-black text-white py-1 rounded-md">
-//         Add Task
-//       </button>
-//     </div>
-//   );
-// };
-
-//task type should be intruduced
 const Column = ({
   title,
   children,
@@ -181,7 +168,7 @@ const Column = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="flex-1 bg-[#F7F7F7] rounded-xl p-3 flex flex-col gap-3">
+    <div className="flex-1 bg-[#F7F7F7] rounded-xl p-3 flex flex-col gap-3 mt-3">
       {/* Header */}
       <h2 className="text-sm font-semibold text-gray-700  flex justify-center">
         {title}
