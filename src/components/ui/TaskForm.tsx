@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useTaskStore } from '../../store/taskStore';
+import type { Task } from '../../../types/task';
 interface Props {
   onClose: () => void;
 }
-const TaskForm = ({onClose} : Props) => {
+const TaskForm = ({ onClose }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<1 | 2 | 3>(1);
-
+  const { addTask } = useTaskStore();
   return (
     <div className="p-3 flex flex-col gap-3 border rounded-lg bg-white">
       {/* Title Input */}
@@ -37,17 +39,32 @@ const TaskForm = ({onClose} : Props) => {
 
       {/* Add button */}
       <div className="flex flex-ro justify-evenly">
-        <button className="bg-black text-white py-1 rounded-md p-3" onClick={onClose}>
+        <button
+          className="bg-black text-white py-1 rounded-md p-3"
+          onClick={onClose}
+        >
           Cancel
         </button>
         <button
           className="bg-black text-white py-1 rounded-md p-3"
           onClick={() => {
-            console.log({
+            const newTask : Task = {
+              id: crypto.randomUUID(),
               title,
               description,
+              startDate: new Date(),
+              dueDate: new Date(),
               priority,
-            });
+              status: 'draft',
+            };
+            if(!title.trim() || !description.trim()) return;
+            addTask(newTask);
+
+            setTitle('');
+            setDescription('');
+            setPriority(1);
+
+            onClose();
           }}
         >
           Add Task

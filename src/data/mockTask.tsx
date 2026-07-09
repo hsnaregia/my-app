@@ -8,7 +8,7 @@ export const Tasks:Task[] = [
     description: 'Draft the initial project proposal for the new client',
     dueDate: new Date('2026-07-15'),
     startDate: new Date('2026-07-08'),
-    priority: '1',
+    priority: 1,
     status: 'draft'
   },
   {
@@ -17,7 +17,7 @@ export const Tasks:Task[] = [
     description: 'Gather data on top 5 competitors in the market',
     dueDate: new Date('2026-07-20'),
     startDate: new Date('2026-07-09'),
-    priority: '2',
+    priority: 2,
     status: 'draft'
   },
 
@@ -28,7 +28,7 @@ export const Tasks:Task[] = [
     description: 'Create RESTful API endpoints for user authentication',
     dueDate: new Date('2026-07-12'),
     startDate: new Date('2026-07-05'),
-    priority: '1',
+    priority:1,
     status: 'active'
   },
   {
@@ -37,7 +37,7 @@ export const Tasks:Task[] = [
     description: 'Create high-fidelity mockups for the dashboard',
     dueDate: new Date('2026-07-14'),
     startDate: new Date('2026-07-06'),
-    priority: '3',
+    priority: 3,
     status: 'active'
   },
 
@@ -48,7 +48,7 @@ export const Tasks:Task[] = [
     description: 'Configure Docker and install all necessary dependencies',
     dueDate: new Date('2026-07-05'),
     startDate: new Date('2026-07-01'),
-    priority: '2',
+    priority: 2,
     status: 'completed'
   },
   {
@@ -57,7 +57,7 @@ export const Tasks:Task[] = [
     description: 'Conduct kickoff meeting with stakeholders',
     dueDate: new Date('2026-07-03'),
     startDate: new Date('2026-07-03'),
-    priority: '1',
+    priority:1,
     status: 'completed'
   }
 ];

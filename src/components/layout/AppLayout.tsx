@@ -2,6 +2,7 @@ import { TaskCard } from '../ui/TaskCard';
 import { useTaskStore } from '../../store/taskStore';
 import { useState } from 'react';
 import TaskForm from '../ui/TaskForm';
+import TaskModal from '../ui/TaskModal';
 const AppLayout = () => {
   return (
     <div className="w-[99vw] h-[100vh] flex flex-row justify-start p-2 ">
@@ -127,7 +128,7 @@ const Button = () => {
 
 const TaskDraft = () => {
   const { tasks } = useTaskStore();
-  const [showModal , isModalOpen] = useState(false)
+  const [showModal, isModalOpen] = useState(false);
   return (
     <div className="flex flex-row gap-2  items-center-safe">
       <Column title="Draft Tasks ">
@@ -153,9 +154,12 @@ const TaskDraft = () => {
         height={50}
         className="w-8 h-8"
         onClick={() => isModalOpen(true)}
-        
       />
-      {showModal && <TaskForm onClose={() => isModalOpen(false)}/>}
+      {showModal && (
+        <TaskModal>
+          <TaskForm onClose={() => isModalOpen(false)} />
+        </TaskModal>
+      )}
     </div>
   );
 };
