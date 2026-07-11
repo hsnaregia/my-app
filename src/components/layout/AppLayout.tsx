@@ -1,15 +1,16 @@
-import { TaskCard } from '../ui/TaskCard';
-import { useTaskStore } from '../../store/taskStore';
 import { useState } from 'react';
+import type { Task } from '../../../types/task';
+
+import { useTaskStore } from '../../store/taskStore';
+
+import { TaskCard } from '../ui/TaskCard';
 import TaskForm from '../ui/TaskForm';
 import TaskModal from '../ui/TaskModal';
+
 const AppLayout = () => {
   return (
-    <div className="w-[99vw] h-[100vh] flex flex-row justify-start p-2 ">
-      {/* this one is for the left part */}
+    <div className="w-[99vw] h-[100vh] flex flex-row justify-start p-2">
       <Sidebar />
-
-      {/* this one is for the right part */}
       <Workspace />
     </div>
   );
@@ -19,7 +20,7 @@ export default AppLayout;
 
 const Sidebar = () => {
   return (
-    <div className=" bg-[#FAFAFA] w-[513px] p-2  flex flex-col justify-start border-1 rounded-xl ">
+    <div className="bg-[#FAFAFA] w-[513px] p-2 flex flex-col border rounded-xl">
       <SidebarHeader />
       <Nav />
       <TaskDraft />
@@ -29,7 +30,7 @@ const Sidebar = () => {
 
 const Workspace = () => {
   return (
-    <div className="flex flex-col gap-4 p-4 h-full ">
+    <div className="flex flex-col gap-4 p-4 h-full">
       <Top />
       <Bottom />
     </div>
@@ -38,7 +39,7 @@ const Workspace = () => {
 
 const Top = () => {
   return (
-    <div className="flex flex-row items-center w-[70vw] h-[3vw] justify-between">
+    <div className="flex justify-between items-center w-[70vw] h-[3vw]">
       <h1>search bar comes here</h1>
       <Button />
     </div>
@@ -47,61 +48,71 @@ const Top = () => {
 
 const Bottom = () => {
   const { tasks } = useTaskStore();
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | undefined>();
+
   return (
-    <div className="flex flex-1 gap-4 p-4 h-full">
-      <Column title="Active Tasks">
-        {tasks
-          .filter((task) => task.status == 'active')
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              id={task.id}
-              title={task.title}
-              description={task.description}
-              dueDate={task.dueDate}
-              startDate={task.startDate}
-              priority={task.priority}
-              status={task.status}
-            />
-          ))}
-      </Column>
-      <Column title="Completed Tasks">
-        {tasks
-          .filter((task) => task.status == 'completed')
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              id={task.id}
-              title={task.title}
-              description={task.description}
-              dueDate={task.dueDate}
-              startDate={task.startDate}
-              priority={task.priority}
-              status={task.status}
-            />
-          ))}
-      </Column>
-    </div>
+    <>
+      <div className="flex flex-1 gap-4 p-4 h-full">
+        <Column title="Active Tasks">
+          {tasks
+            .filter((task) => task.status === 'active')
+            .map((task) => (
+              <TaskCard
+                key={task.id}
+                {...task}
+                onEdit={(task) => {
+                  setSelectedTask(task);
+                  setShowModal(true);
+                }}
+              />
+            ))}
+        </Column>
+
+        <Column title="Completed Tasks">
+          {tasks
+            .filter((task) => task.status === 'completed')
+            .map((task) => (
+              <TaskCard key={task.id} {...task} />
+            ))}
+        </Column>
+      </div>
+
+      {showModal && selectedTask && (
+        <TaskModal>
+          <TaskForm
+            mode="edit"
+            task={selectedTask}
+            onClose={() => {
+              setShowModal(false);
+              setSelectedTask(undefined);
+            }}
+          />
+        </TaskModal>
+      )}
+    </>
   );
 };
 
 const SidebarHeader = () => {
   return (
-    <div className="flex flex-row items-center justify-evenly h-[10vh] ">
-      <>
-        <img src="../src/assets/icons/logo.png" alt="logo" />
-        My Doist
-        <img
-          src="../src/assets/icons/icons8-moon-30.png"
-          alt="night mode"
-          className="w-[20px] h-[20px]"
-        ></img>
-        <img
-          src="../src/assets/icons/icons8-back-to-30.png"
-          alt="close side"
-          className="w-[20px] h-[20px]"
-        ></img>
-      </>
+    <div className="flex flex-row items-center justify-evenly h-[10vh]">
+      <img src="../src/assets/icons/logo.png" alt="logo" />
+
+      <h2>My Doist</h2>
+
+      <img
+        src="../src/assets/icons/icons8-moon-30.png"
+        alt="night mode"
+        className="w-[20px] h-[20px]"
+      />
+
+      <img
+        src="../src/assets/icons/icons8-back-to-30.png"
+        alt="close side"
+        className="w-[20px] h-[20px]"
+      />
     </div>
   );
 };
@@ -118,49 +129,42 @@ const Nav = () => {
 const Button = () => {
   return (
     <div>
-      <>
-        <img src="" alt="" />
-        <h2>lorem</h2>
-      </>
+      <img src="" alt="" />
+      <h2>lorem</h2>
     </div>
   );
 };
 
 const TaskDraft = () => {
   const { tasks } = useTaskStore();
-  const [showModal, isModalOpen] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <div className="flex flex-row gap-2  items-center-safe">
-      <Column title="Draft Tasks ">
-        {tasks
-          .filter((task) => task.status == 'draft')
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              id={task.id}
-              title={task.title}
-              description={task.description}
-              dueDate={task.dueDate}
-              startDate={task.startDate}
-              priority={task.priority}
-              status={task.status}
-            />
-          ))}
-      </Column>
-      <img
-        src=".\src\assets\icons\icons8-plus-30.png"
-        alt="plus sign"
-        width={50}
-        height={50}
-        className="w-8 h-8"
-        onClick={() => isModalOpen(true)}
-      />
+    <>
+      <div className="flex flex-row gap-2 items-start">
+        <Column title="Draft Tasks">
+          {tasks
+            .filter((task) => task.status === 'draft')
+            .map((task) => (
+              <TaskCard key={task.id} {...task} />
+            ))}
+        </Column>
+
+        <img
+          src="./src/assets/icons/icons8-plus-30.png"
+          alt="plus sign"
+          className="w-8 h-8 cursor-pointer"
+          onClick={() => setShowModal(true)}
+        />
+      </div>
+
       {showModal && (
         <TaskModal>
-          <TaskForm mode="create" onClose={() => isModalOpen(false)} />
+          <TaskForm mode="create" onClose={() => setShowModal(false)} />
         </TaskModal>
       )}
-    </div>
+    </>
   );
 };
 
@@ -173,12 +177,10 @@ const Column = ({
 }) => {
   return (
     <div className="flex-1 bg-[#F7F7F7] rounded-xl p-3 flex flex-col gap-3 mt-3">
-      {/* Header */}
-      <h2 className="text-sm font-semibold text-gray-700  flex justify-center">
+      <h2 className="text-sm font-semibold text-gray-700 text-center">
         {title}
       </h2>
 
-      {/* Content */}
       <div className="flex flex-col gap-2">{children}</div>
     </div>
   );

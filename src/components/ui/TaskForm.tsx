@@ -10,8 +10,7 @@ const TaskForm = ({ mode, onClose, task }: Props) => {
   const [title, setTitle] = useState(task?.title ?? '');
   const [description, setDescription] = useState(task?.description ?? '');
   const [priority, setPriority] = useState<1 | 2 | 3>(task?.priority ?? 1);
-  const { addTask, updateTask } = useTaskStore;
-  const { addTask } = useTaskStore();
+  const { addTask, updateTask } = useTaskStore();
   return (
     <div className="p-3 flex flex-col gap-3 border rounded-lg bg-white">
       {/* Title Input */}
@@ -82,7 +81,7 @@ const TaskForm = ({ mode, onClose, task }: Props) => {
 
             onClose();
           }}
-        ></button>
+        >{mode === "create" ? "Add Task" : "Update Task"}</button>
       </div>
     </div>
   );
