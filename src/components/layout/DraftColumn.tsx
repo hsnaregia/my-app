@@ -4,10 +4,11 @@ import { Column } from "../ui/Column";
 import TaskModal from "../ui/TaskModal";
 import TaskForm from "../ui/TaskForm";
 import { TaskCard } from "../ui/TaskCard";
+import type { Task } from "../../../types/task";
 
 export const DraftColumn = () => {
    const { tasks } = useTaskStore();
-
+  const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -32,6 +33,18 @@ export const DraftColumn = () => {
       {showModal && (
         <TaskModal>
           <TaskForm mode="create" onClose={() => setShowModal(false)} />
+        </TaskModal>
+      )}
+            {showModal && selectedTask && (
+        <TaskModal>
+          <TaskForm
+            mode="edit"
+            task={selectedTask}
+            onClose={() => {
+              setShowModal(false);
+              setSelectedTask(undefined);
+            }}
+          />
         </TaskModal>
       )}
     </>
