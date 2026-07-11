@@ -81,7 +81,9 @@ const TaskForm = ({ mode, onClose, task }: Props) => {
 
             onClose();
           }}
-        >{mode === "create" ? "Add Task" : "Update Task"}</button>
+        >
+          {mode === 'create' ? 'Add Task' : 'Update Task'}
+        </button>
       </div>
     </div>
   );

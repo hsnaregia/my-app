@@ -8,7 +8,6 @@ import TaskForm from '../ui/TaskForm';
 
 export const ActiveColumn = () => {
   const { tasks } = useTaskStore();
-  const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showEditModal, setShowEditModal] = useState(false);
   return (
@@ -21,16 +20,11 @@ export const ActiveColumn = () => {
             {...task}
             onEdit={(task) => {
               setSelectedTask(task);
-              setShowModal(true);
+              setShowEditModal(true);
             }}
           />
         ))}
-TODO: here needs to be fixed the show modal has some stuff
-      {showModal && (
-        <TaskModal>
-          <TaskForm mode="edit" onClose={() => setShowModal(false)} />
-        </TaskModal>
-      )}
+
       {showEditModal && selectedTask && (
         <TaskModal>
           <TaskForm
