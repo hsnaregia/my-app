@@ -10,7 +10,7 @@ export const DraftColumn = () => {
   const { tasks } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showModal, setShowModal] = useState(false);
-
+    const [showEditModal, setShowEditModal] = useState(false);
   return (
     <>
       <div className="flex flex-row gap-2 items-start">
@@ -18,7 +18,10 @@ export const DraftColumn = () => {
           {tasks
             .filter((task) => task.status === 'draft')
             .map((task) => (
-              <TaskCard key={task.id} {...task} />
+              <TaskCard key={task.id} {...task} onEdit={(task)=>{
+                setSelectedTask(task);
+                setShowEditModal(true)
+              }}/>
             ))}
         </Column>
 
@@ -36,18 +39,13 @@ export const DraftColumn = () => {
         </TaskModal>
       )}
 
-      {/* {showModal && (
-        <TaskModal>
-          <TaskForm mode="edit" onClose={() => setShowModal(false)} />
-        </TaskModal>
-      )} */}
-      {showModal && selectedTask && (
+      {showEditModal && selectedTask && (
         <TaskModal>
           <TaskForm
             mode="edit"
             task={selectedTask}
             onClose={() => {
-              setShowModal(false);
+              setShowEditModal(false);
               setSelectedTask(undefined);
             }}
           />

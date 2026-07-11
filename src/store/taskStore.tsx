@@ -14,7 +14,16 @@ updateTask: (updatedTask: Task) => void;
 
 type TaskStore = States & Actions;
 export const useTaskStore = create<TaskStore>((set) => ({
-  tasks: [],
+
+  // TODO:this task is false and needs to be deleted
+  tasks: [{
+  id: "1",
+  title: "Study React",
+  description: "...",
+  dueDate:new Date(),
+  priority: 2,
+  status: "active"
+},],
 
   addTask: (task: Task) => {
     set((state) => ({
