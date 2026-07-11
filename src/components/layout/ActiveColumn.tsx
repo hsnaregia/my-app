@@ -24,6 +24,11 @@ export const ActiveColumn = () => {
             }}
           />
         ))}
+      {/* {showModal && (
+        <TaskModal>
+          <TaskForm mode="edit" onClose={() => setShowModal(false)} />
+        </TaskModal>
+      )} */}
       {showModal && selectedTask && (
         <TaskModal>
           <TaskForm

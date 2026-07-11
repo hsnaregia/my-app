@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { useTaskStore } from "../../store/taskStore";
-import { Column } from "../ui/Column";
-import TaskModal from "../ui/TaskModal";
-import TaskForm from "../ui/TaskForm";
-import { TaskCard } from "../ui/TaskCard";
-import type { Task } from "../../../types/task";
+import { useState } from 'react';
+import { useTaskStore } from '../../store/taskStore';
+import { Column } from '../ui/Column';
+import TaskModal from '../ui/TaskModal';
+import TaskForm from '../ui/TaskForm';
+import { TaskCard } from '../ui/TaskCard';
+import type { Task } from '../../../types/task';
 
 export const DraftColumn = () => {
-   const { tasks } = useTaskStore();
+  const { tasks } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showModal, setShowModal] = useState(false);
 
@@ -35,7 +35,13 @@ export const DraftColumn = () => {
           <TaskForm mode="create" onClose={() => setShowModal(false)} />
         </TaskModal>
       )}
-            {showModal && selectedTask && (
+
+      {/* {showModal && (
+        <TaskModal>
+          <TaskForm mode="edit" onClose={() => setShowModal(false)} />
+        </TaskModal>
+      )} */}
+      {showModal && selectedTask && (
         <TaskModal>
           <TaskForm
             mode="edit"
