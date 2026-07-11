@@ -3,11 +3,14 @@ import { useTaskStore } from '../../store/taskStore';
 import type { Task } from '../../../types/task';
 interface Props {
   onClose: () => void;
+  mode: 'create' | 'edit';
+  task?: Task;
 }
-const TaskForm = ({ onClose }: Props) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<1 | 2 | 3>(1);
+const TaskForm = ({ mode, onClose, task }: Props) => {
+  const [title, setTitle] = useState(task?.title ?? '');
+  const [description, setDescription] = useState(task?.description ?? '');
+  const [priority, setPriority] = useState<1 | 2 | 3>(task?.priority ?? 1);
+  const { addTask, updateTask } = useTaskStore;
   const { addTask } = useTaskStore();
   return (
     <div className="p-3 flex flex-col gap-3 border rounded-lg bg-white">
@@ -48,17 +51,30 @@ const TaskForm = ({ onClose }: Props) => {
         <button
           className="bg-black text-white py-1 rounded-md p-3"
           onClick={() => {
-            const newTask : Task = {
-              id: crypto.randomUUID(),
-              title,
-              description,
-              startDate: new Date(),
-              dueDate: new Date(),
-              priority,
-              status: 'draft',
-            };
-            if(!title.trim() || !description.trim()) return;
-            addTask(newTask);
+            if (!title.trim() || !description.trim()) return;
+
+            if (mode === 'create') {
+              const newTask: Task = {
+                id: crypto.randomUUID(),
+                title,
+                description,
+                startDate: new Date(),
+                dueDate: new Date(),
+                priority,
+                status: 'draft',
+              };
+
+              addTask(newTask);
+            } else if (task) {
+              const updatedTask: Task = {
+                ...task,
+                title,
+                description,
+                priority,
+              };
+
+              updateTask(updatedTask);
+            }
 
             setTitle('');
             setDescription('');
@@ -66,9 +82,7 @@ const TaskForm = ({ onClose }: Props) => {
 
             onClose();
           }}
-        >
-          Add Task
-        </button>
+        ></button>
       </div>
     </div>
   );

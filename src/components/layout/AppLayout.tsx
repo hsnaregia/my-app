@@ -157,7 +157,7 @@ const TaskDraft = () => {
       />
       {showModal && (
         <TaskModal>
-          <TaskForm onClose={() => isModalOpen(false)} />
+          <TaskForm mode="create" onClose={() => isModalOpen(false)} />
         </TaskModal>
       )}
     </div>
