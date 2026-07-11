@@ -1,0 +1,39 @@
+import { useState } from "react";
+import { useTaskStore } from "../../store/taskStore";
+import { Column } from "../ui/Column";
+import TaskModal from "../ui/TaskModal";
+import TaskForm from "../ui/TaskForm";
+import { TaskCard } from "../ui/TaskCard";
+
+export const DraftColumn = () => {
+   const { tasks } = useTaskStore();
+
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <div className="flex flex-row gap-2 items-start">
+        <Column title="Draft Tasks">
+          {tasks
+            .filter((task) => task.status === 'draft')
+            .map((task) => (
+              <TaskCard key={task.id} {...task} />
+            ))}
+        </Column>
+
+        <img
+          src="./src/assets/icons/icons8-plus-30.png"
+          alt="plus sign"
+          className="w-8 h-8 cursor-pointer"
+          onClick={() => setShowModal(true)}
+        />
+      </div>
+
+      {showModal && (
+        <TaskModal>
+          <TaskForm mode="create" onClose={() => setShowModal(false)} />
+        </TaskModal>
+      )}
+    </>
+  );
+};
