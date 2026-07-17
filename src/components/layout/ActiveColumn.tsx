@@ -17,7 +17,8 @@ export const ActiveColumn = () => {
         .map((task) => (
           <TaskCard
             key={task.id}
-            {...task}
+            task={task}
+            
             onEdit={(task) => {
               setSelectedTask(task);
               setShowEditModal(true);

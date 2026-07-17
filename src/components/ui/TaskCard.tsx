@@ -1,37 +1,23 @@
 import type { Task } from '../../../types/task';
 
-interface TaskCardProps extends Task {
-  onEdit?: (task: Task) => void;
+interface TaskCardProps {
+  task:Task;
+  onEdit?: (task: Task) => undefined|void|string;
 }
 
-export const TaskCard = ({
-  id,
-  title,
-  description,
-  dueDate,
-  startDate,
-  priority,
-  status,
-  onEdit,
-}: TaskCardProps) => {
+export const TaskCard = (
+{task,onEdit}
+: TaskCardProps) => {
   return (
     <div className="bg-white border rounded-lg p-3 flex flex-col gap-2">
       <div className="flex justify-between items-center">
-        <h3 className="text-sm font-medium">{title}</h3>
+        <h3 className="text-sm font-medium">{task.title}</h3>
 
         <div className="flex gap-2">
           <span
             className="cursor-pointer"
             onClick={() =>
-              onEdit?.({
-                id,
-                title,
-                description,
-                startDate,
-                dueDate,
-                priority,
-                status,
-              })
+              onEdit?.(task)
             }
           >
             ✏️
@@ -41,12 +27,12 @@ export const TaskCard = ({
         </div>
       </div>
 
-      <p className="text-xs text-gray-500">{description}</p>
+      <p className="text-xs text-gray-500">{task.description}</p>
 
       <div className="flex justify-between text-xs">
-        <span>{dueDate.toLocaleDateString()}</span>
-        <span>{priority}</span>
-        <span>{status}</span>
+        <span>{task.dueDate.toLocaleDateString()}</span>
+        <span>{task.priority}</span>
+        <span>{task.status}</span>
       </div>
     </div>
   );

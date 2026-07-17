@@ -18,9 +18,9 @@ export const DraftColumn = () => {
           {tasks
             .filter((task) => task.status === 'draft')
             .map((task) => (
-              <TaskCard key={task.id} {...task} onEdit={(task)=>{
+              <TaskCard key={task.id} task={task}  onEdit={(task)=>{
                 setSelectedTask(task);
-                setShowEditModal(true)
+                setShowEditModal(true);
               }}/>
             ))}
         </Column>
