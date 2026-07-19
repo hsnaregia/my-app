@@ -1,31 +1,63 @@
 import type { Task } from '../../../types/task';
-
+import { useEffect, useRef } from 'react';
+import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 interface TaskCardProps {
   task: Task;
   onEdit?: (task: Task) => undefined | void | string;
 }
 
 export const TaskCard = ({ task, onEdit }: TaskCardProps) => {
-  return (
-    <div className="bg-white border rounded-lg p-3 flex flex-col gap-2">
-      <div className="flex justify-between items-center">
-        <h3 className="text-sm font-medium">{task.title}</h3>
+  const isCompleted = task.status === 'completed';
+  const isActive = task.status === 'active';
 
-        <div className="flex gap-2">
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) return;
+    if (task.status === 'completed') return;
+
+    return draggable({
+      element,
+      getInitialData: () => ({
+        type: 'task',
+        taskId: task.id,
+      }),
+    });
+  });
+
+  return (
+    <div
+      className={`bg-[#e6e6e6]  border rounded-lg p-3 flex flex-col justify-between gap-2 h-[20vh]   ${
+        isCompleted ? 'border-amber-300 opacity-30 cursor-not-allowed' : ''
+      } ${isActive ? 'border-blue-700 cursor-pointer ' : ''}`}
+      ref={ref}
+    >
+      <div className="bg-white flex flex-col justify-start gap-2 h-[75%]  border-1 rounded-2xl p-4">
+        <div className="flex justify-between items-center">
+          <div className="flex flex-row gap-3">
+            <span className="border-1 border-gray-400 rounded-4xl w-6 flex justify-center">
+              {task.priority}
+            </span>
+            <h3 className="text-sm font-medium">{task.title}</h3>
+          </div>
+        </div>
+        <p className="text-xs p-2 m-1 line-clamp-3">{task.description}</p>
+      </div>
+
+      <div className="flex flex-row justify-between text-xs">
+        <div className="flex flex-row justify-between gap-6">
+          <span>{task.dueDate.toLocaleDateString()}</span>
+          <span>{task.status}</span>
+          <div className="flex gap-2"></div>
+        </div>
+        <div className=" flex flex-row justify-between gap-4">
+          <span className="cursor-pointer">🗑️</span>
           <span className="cursor-pointer" onClick={() => onEdit?.(task)}>
             ✏️
           </span>
-
-          <span className="cursor-pointer">🗑️</span>
         </div>
-      </div>
-
-      <p className="text-xs text-gray-500">{task.description}</p>
-
-      <div className="flex justify-between text-xs">
-        <span>{task.dueDate.toLocaleDateString()}</span>
-        <span>{task.priority}</span>
-        <span>{task.status}</span>
       </div>
     </div>
   );

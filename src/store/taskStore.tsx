@@ -6,15 +6,13 @@ interface States {
 
 interface Actions {
   addTask: (task: Task) => void;
-updateTask: (updatedTask: Task) => void;
-  deleteTask: (id:string) => void;
-  moveToActive: () => void;
-  moveToCompleted: () => void;
+  updateTask: (updatedTask: Task) => void;
+  deleteTask: (id: string) => void;
+  moveTask: (taskId: string, status: Task['status']) => void;
 }
 
 type TaskStore = States & Actions;
 export const useTaskStore = create<TaskStore>((set) => ({
-
   tasks: [],
 
   addTask: (task: Task) => {
@@ -23,24 +21,34 @@ export const useTaskStore = create<TaskStore>((set) => ({
     }));
   },
 
-updateTask:(updatedTask) => {
-  set((state) => ({
-    tasks: state.tasks.map((task) => {
-  if(task.id === updatedTask.id)
-    {return updatedTask;}
-  else{
-    return  task;
-  }
-    }),
-  }));
-},
+  updateTask: (updatedTask) => {
+    set((state) => ({
+      tasks: state.tasks.map((task) => {
+        if (task.id === updatedTask.id) {
+          return updatedTask;
+        } else {
+          return task;
+        }
+      }),
+    }));
+  },
 
-deleteTask: (id) => {
-  set((state) => ({
-    tasks: state.tasks.filter((task) => task.id !== id),
-  }));
-},
-moveToActive: () => {},
+  deleteTask: (id) => {
+    set((state) => ({
+      tasks: state.tasks.filter((task) => task.id !== id),
+    }));
+  },
 
-  moveToCompleted: () => {},
+  moveTask: (taskId, status) => {
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              status,
+            }
+          : task
+      ),
+    }));
+  },
 }));

@@ -10,15 +10,16 @@ export const ActiveColumn = () => {
   const { tasks } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showEditModal, setShowEditModal] = useState(false);
+
+
   return (
-    <Column title="Active Tasks">
+    <Column title="Active Tasks" columnId='active'>
       {tasks
         .filter((task) => task.status === 'active')
         .map((task) => (
           <TaskCard
             key={task.id}
             task={task}
-            
             onEdit={(task) => {
               setSelectedTask(task);
               setShowEditModal(true);
@@ -34,8 +35,7 @@ export const ActiveColumn = () => {
             onClose={() => {
               setShowEditModal(false);
               setSelectedTask(undefined);
-            }
-          }
+            }}
           />
         </TaskModal>
       )}
