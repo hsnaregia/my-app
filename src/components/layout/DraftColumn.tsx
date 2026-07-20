@@ -7,7 +7,7 @@ import { TaskCard } from '../ui/TaskCard';
 import type { Task } from '../../../types/task';
 
 export const DraftColumn = () => {
-  const { tasks } = useTaskStore();
+  const { tasks , deleteTask } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,6 +20,7 @@ export const DraftColumn = () => {
             .filter((task) => task.status === 'draft')
             .map((task) => (
               <TaskCard
+              onDelete={(id) => {deleteTask(id)}}
               key={task.id}
               task={task}
               onEdit={(task) => {

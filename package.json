@@ -13,8 +13,10 @@
     "@atlaskit/pragmatic-drag-and-drop": "^2.0.1",
     "@tailwindcss/vite": "^4.3.2",
     "react": "^19.2.7",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.2",
+    "toaster": "^0.1.2",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

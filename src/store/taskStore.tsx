@@ -1,5 +1,7 @@
-import { create } from 'zustand';
-import type { Task } from '../../types/task';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { Task } from "../../types/task";
+
 interface States {
   tasks: Task[];
 }
@@ -8,47 +10,57 @@ interface Actions {
   addTask: (task: Task) => void;
   updateTask: (updatedTask: Task) => void;
   deleteTask: (id: string) => void;
-  moveTask: (taskId: string, status: Task['status']) => void;
+  moveTask: (taskId: string, status: Task["status"]) => void;
 }
 
 type TaskStore = States & Actions;
-export const useTaskStore = create<TaskStore>((set) => ({
-  tasks: [],
 
-  addTask: (task: Task) => {
-    set((state) => ({
-      tasks: [...state.tasks, task],
-    }));
-  },
+export const useTaskStore = create<TaskStore>()(
+  persist(
+    (set) => ({
+      tasks: [],
 
-  updateTask: (updatedTask) => {
-    set((state) => ({
-      tasks: state.tasks.map((task) => {
-        if (task.id === updatedTask.id) {
-          return updatedTask;
-        } else {
-          return task;
-        }
-      }),
-    }));
-  },
+      addTask: (task) =>
+        set((state) => ({
+          tasks: [...state.tasks, task],
+        })),
 
-  deleteTask: (id) => {
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== id),
-    }));
-  },
+      updateTask: (updatedTask) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task
+          ),
+        })),
 
-  moveTask: (taskId, status) => {
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status,
-            }
-          : task
-      ),
-    }));
-  },
-}));
+      deleteTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.filter((task) => task.id !== id),
+        })),
+
+      moveTask: (taskId, status) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId
+              ? {
+                  ...task,
+                  status,
+                }
+              : task
+          ),
+        })),
+    }),
+    {
+      name: "task-storage",
+
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+
+        state.tasks = state.tasks.map((task) => ({
+          ...task,
+          // startDate: new Date(task.startDate),
+          dueDate: new Date(task.dueDate),
+        }));
+      },
+    }
+  )
+);

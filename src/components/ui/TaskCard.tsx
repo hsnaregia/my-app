@@ -4,9 +4,11 @@ import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 interface TaskCardProps {
   task: Task;
   onEdit?: (task: Task) => undefined | void | string;
+  onDelete: (id:string) =>void;
 }
 
-export const TaskCard = ({ task, onEdit }: TaskCardProps) => {
+
+export const TaskCard = ({ task, onEdit,onDelete }: TaskCardProps) => {
   const isCompleted = task.status === 'completed';
   const isActive = task.status === 'active';
 
@@ -48,12 +50,12 @@ export const TaskCard = ({ task, onEdit }: TaskCardProps) => {
 
       <div className="flex flex-row justify-between text-xs">
         <div className="flex flex-row justify-between gap-6">
-          <span>{task.dueDate.toLocaleDateString()}</span>
-          <span>{task.status}</span>
+          <span className='text-green-600'>{task.startDate?.toLocaleDateString()}</span>
+         <span className='text-red-600'>{task.dueDate.toLocaleDateString()}</span>
           <div className="flex gap-2"></div>
         </div>
         <div className=" flex flex-row justify-between gap-4">
-          <span className="cursor-pointer">🗑️</span>
+          <span className="cursor-pointer" onClick={() => onDelete?.(task.id)}>🗑️</span>
           <span className="cursor-pointer" onClick={() => onEdit?.(task)}>
             ✏️
           </span>

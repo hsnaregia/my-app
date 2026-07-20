@@ -7,7 +7,7 @@ import TaskModal from '../ui/TaskModal';
 import TaskForm from '../ui/TaskForm';
 
 export const ActiveColumn = () => {
-  const { tasks } = useTaskStore();
+  const { tasks , deleteTask } = useTaskStore();
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -18,6 +18,7 @@ export const ActiveColumn = () => {
         .filter((task) => task.status === 'active')
         .map((task) => (
           <TaskCard
+          onDelete={(id) => deleteTask(id)}
             key={task.id}
             task={task}
             onEdit={(task) => {
